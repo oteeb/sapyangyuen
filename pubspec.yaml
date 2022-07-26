@@ -53,6 +53,8 @@ dev_dependencies:
 flutter_native_splash:
   color: "#9ADCFF"
   image: assets/sy450.png
+  color_dark: "#121212"
+  image_dark: assets/sy450.png
   
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
