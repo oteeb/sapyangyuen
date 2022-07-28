@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'sign_in.dart';
+import 'package:sapyangyuen/api/callapi/callapi.dart';
 
 class signup extends StatefulWidget {
   const signup({Key? key}) : super(key: key);
@@ -13,9 +14,26 @@ class signup extends StatefulWidget {
   State<signup> createState() => _signupState();
 }
 
-class _signupState extends State<signup> {
-  final _formkey = GlobalKey<FormState>();
 
+class _signupState extends State<signup> {
+
+  CallAPI callapi = CallAPI();
+
+   @override
+  void initState() {
+    super.initState();
+    
+    if (callapi != null) {
+      callapi.GetapiProvince();
+    }else{
+      print("มีค่า null !!");
+    }
+  }
+  
+  
+  
+
+  final _formkey = GlobalKey<FormState>();
   final List<String> _provinceitems = [
     'Item1',
     'Item2',
@@ -52,7 +70,7 @@ class _signupState extends State<signup> {
   TextEditingController _postcodeController = TextEditingController();
 
   final ButtonStyle style = ElevatedButton.styleFrom(
-    textStyle: const TextStyle(fontSize: 20,fontFamily: 'Mitr'),
+    textStyle: const TextStyle(fontSize: 20, fontFamily: 'Mitr'),
     fixedSize: const Size(250, 50),
     primary: Color.fromARGB(255, 26, 62, 110),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -362,21 +380,22 @@ class _signupState extends State<signup> {
                   child: GestureDetector(
                     onTap: () {
                       Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) {
-                    return signin();
-                  }));
+                          .push(MaterialPageRoute(builder: (context) {
+                        return signin();
+                      }));
                     },
-                    child: Text('เข้าสู่ระบบ',style: TextStyle(fontSize: 18),),
+                    child: Text(
+                      'เข้าสู่ระบบ',
+                      style: TextStyle(fontSize: 18),
+                    ),
                   ),
                 ),
-                
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: ElevatedButton(
                     style: style,
                     onPressed: () {
                       if (_formkey.currentState!.validate()) {
-                        
                         final name = _firstNameController.text;
                         print(_provinceselected);
 
