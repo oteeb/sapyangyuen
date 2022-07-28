@@ -4,6 +4,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'sign_in.dart';
 
 class signup extends StatefulWidget {
   const signup({Key? key}) : super(key: key);
@@ -14,212 +15,383 @@ class signup extends StatefulWidget {
 
 class _signupState extends State<signup> {
   final _formkey = GlobalKey<FormState>();
-  final List<String> items = [
-    'Item1',
-    'Item2',
-    'Item3',
-    'Item4',
-  ];
-  String? selectedValue;
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
-      body: ListView(
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height / 3.4,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Color.fromARGB(255, 154, 220, 255),
-                      Color.fromARGB(255, 154, 220, 255)
-                    ],
-                  ),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 45,
-                    ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Image.asset(
-                        'assets/sy.png',
-                        width: 130,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                    Text(
-                      'สมัครสมาชิก',
-                      style: GoogleFonts.getFont('Mitr', fontSize: 30),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                child: Form(
-                  key: _formkey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            labelText: "ชื่อ :",
-                            filled: true,
-                            fillColor: Colors.white70,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            labelText: "นามสกุล :",
-                            filled: true,
-                            fillColor: Colors.white70,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            labelText: "นามสกุล :",
-                            filled: true,
-                            fillColor: Colors.white70,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            labelText: "นามสกุล :",
-                            filled: true,
-                            fillColor: Colors.white70,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: TextFormField(
-                          minLines: 4,
-                          keyboardType: TextInputType.multiline,
-                          maxLines: null,
-                          decoration: InputDecoration(
-                            labelText: "ที่อยู่ :",
-                            filled: true,
-                            fillColor: Colors.white70,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                          ),
-                        ),
-                      ),
-                      selected(),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class selected extends StatefulWidget {
-  const selected({Key? key}) : super(key: key);
-
-  @override
-  State<selected> createState() => _selectedState();
-}
-
-class _selectedState extends State<selected> {
-  final List<String> items = [
+  final List<String> _provinceitems = [
     'Item1',
     'Item2',
     'Item3',
     'Item4',
     'Item5',
     'Item6',
-    'Item7',
-    'Item8',
-    'Item9',
-    'Item10',
-    'Item11',
-    'Item12',
-    'Item13',
-    'Item14',
-    'Item15',
-    'Item16',
-    'Item17',
-    'Item18',
-    'Item19',
-    'Item20',
-    
   ];
-  String? selectedValue = null;
+  final List<String> _districtitems = [
+    'Item11',
+    'Item22',
+    'Item33',
+    'Item44',
+    'Item55',
+    'Item66',
+  ];
+  final List<String> _cantonsitems = [
+    'Item21',
+    'Item22',
+    'Item23',
+    'Item24',
+    'Item25',
+    'Item26',
+  ];
+  String? _provinceselected = null;
+  String? _districtselected = null;
+  String? _cantonselected = null;
+
+  TextEditingController _firstNameController = TextEditingController();
+  TextEditingController _lastNameController = TextEditingController();
+  TextEditingController _idcardController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
+  TextEditingController _housenumberController = TextEditingController();
+  TextEditingController _postcodeController = TextEditingController();
+
+  final ButtonStyle style = ElevatedButton.styleFrom(
+    textStyle: const TextStyle(fontSize: 20,fontFamily: 'Mitr'),
+    fixedSize: const Size(250, 50),
+    primary: Color.fromARGB(255, 26, 62, 110),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+  );
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton2(
-          hint: Text(
-            'Select Item',
-            style: TextStyle(
-              fontSize: 16,
-              color: Theme.of(context).hintColor,
+    return Scaffold(
+      backgroundColor: Color.fromARGB(255, 154, 220, 255),
+      body: ListView(
+        children: [
+          SizedBox(
+            height: 20,
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: Image.asset(
+              'assets/sy.png',
+              width: 130,
+              fit: BoxFit.contain,
             ),
           ),
-          items: items
-              .map((item) => DropdownMenuItem<String>(
-                    value: item,
-                    child: Text(
-                      item,
-                      style: const TextStyle(
-                        fontSize: 16,
+          Align(
+            alignment: Alignment.center,
+            child: Text(
+              'สมัครสมาชิก',
+              style: GoogleFonts.getFont('Mitr', fontSize: 30),
+            ),
+          ),
+          Form(
+            key: _formkey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: TextFormField(
+                    controller: _firstNameController,
+                    decoration: InputDecoration(
+                      labelText: "ชื่อ :",
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
                       ),
                     ),
-                  ))
-              .toList(),
-          value: selectedValue,
-          onChanged: (value) {
-            setState(() {
-              selectedValue = value as String;
-            });
-          },
-          buttonWidth: 200,
-          itemHeight: 50,
-        ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'กรุณากรอกชื่อ !';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: TextFormField(
+                    controller: _lastNameController,
+                    decoration: InputDecoration(
+                      labelText: "นามสกุล :",
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'กรุณากรอกเบอร์นามสกุล !';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: TextFormField(
+                    controller: _idcardController,
+                    maxLength: 13,
+                    decoration: InputDecoration(
+                      labelText: "หมายเลขบัตรประจำตัวประชาชน :",
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: TextFormField(
+                    controller: _phoneController,
+                    keyboardType: TextInputType.number,
+                    maxLength: 10,
+                    decoration: InputDecoration(
+                      labelText: "เบอร์โทรศัพท์ :",
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'กรุณากรอกเบอร์โทรศัพท์ !';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.all(10.0),
+                        height: 80,
+                        width: 180,
+                        child: TextFormField(
+                          controller: _housenumberController,
+                          decoration: InputDecoration(
+                            labelText: "บ้านเลขที่ :",
+                            filled: true,
+                            fillColor: Colors.white,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        height: 80,
+                        width: 180,
+                        padding: const EdgeInsets.all(10.0),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButtonFormField2(
+                            decoration: InputDecoration(
+                              labelText: "จังหวัด :",
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                            ),
+                            hint: Text(
+                              'เลือกจังหวัด',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Theme.of(context).hintColor,
+                              ),
+                            ),
+                            items: _provinceitems
+                                .map((item) => DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Text(
+                                        item,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ))
+                                .toList(),
+                            value: _provinceselected,
+                            onChanged: (value) {
+                              setState(() {
+                                _provinceselected = value as String;
+                                //print(selectedValue);
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Container(
+                        height: 80,
+                        width: 180,
+                        padding: const EdgeInsets.all(10.0),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButtonFormField2(
+                            decoration: InputDecoration(
+                              labelText: "อำเภอ :",
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                            ),
+                            hint: Text(
+                              'เลือกอำเภอ',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Theme.of(context).hintColor,
+                              ),
+                            ),
+                            items: _districtitems
+                                .map((item) => DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Text(
+                                        item,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ))
+                                .toList(),
+                            value: _districtselected,
+                            onChanged: (value) {
+                              setState(() {
+                                _districtselected = value as String;
+                                //print(selectedValue);
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        height: 80,
+                        width: 180,
+                        padding: const EdgeInsets.all(10.0),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButtonFormField2(
+                            decoration: InputDecoration(
+                              labelText: "ตำบล :",
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                            ),
+                            hint: Text(
+                              'เลือกตำบล',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Theme.of(context).hintColor,
+                              ),
+                            ),
+                            items: _cantonsitems
+                                .map((item) => DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Text(
+                                        item,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ))
+                                .toList(),
+                            value: _cantonselected,
+                            onChanged: (value) {
+                              setState(() {
+                                _cantonselected = value as String;
+                                //print(selectedValue);
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.all(10.0),
+                        height: 100,
+                        width: 195,
+                        child: TextFormField(
+                          maxLength: 5,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            labelText: "รหัสไปรษณีย์ :",
+                            filled: true,
+                            fillColor: Colors.white,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.all(10.0),
+                        height: 80,
+                        width: 195,
+                      ),
+                    ),
+                  ],
+                ),
+                Container(
+                  padding: const EdgeInsets.all(10.0),
+                  alignment: Alignment.bottomLeft,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return signin();
+                  }));
+                    },
+                    child: Text('เข้าสู่ระบบ',style: TextStyle(fontSize: 18),),
+                  ),
+                ),
+                
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: ElevatedButton(
+                    style: style,
+                    onPressed: () {
+                      if (_formkey.currentState!.validate()) {
+                        
+                        final name = _firstNameController.text;
+                        print(_provinceselected);
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('โอเค')),
+                        );
+                      }
+                    },
+                    child: const Text('สมัครสมาชิก'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -12,82 +12,102 @@ class homepage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
-      
-          backgroundColor: Color.fromARGB(255, 154, 220, 255),
-          body: Container(
-              padding: EdgeInsets.all(20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      SizedBox(
-                        height: 60,
-                      ),
-                      Image.asset(
-                        'assets/sy.png',
-                        height: 250,
-                        width: 250,
-                      ),
-                      SizedBox(
-                        height: 180,
-                      ),
-                      ElevatedButton(
-                        style: ButtonStyle(
-                          //overlayColor: MaterialStateProperty.all(Color.fromARGB(255, 255, 0, 0)),
-                          shadowColor: MaterialStateProperty.all(Color.fromARGB(255, 0, 0, 0)),
-                          backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 12, 0, 187)),
-                          minimumSize: MaterialStateProperty.all(const Size(250, 50)),
-                          textStyle: MaterialStateProperty.all(TextStyle(fontSize: 18)),
-                          shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          ),
-                          ),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context){
-                              return signup();
-
-                            })
-                          );
-                        },
-                        child: Text('ลงทะเบียน',style: GoogleFonts.getFont('Mitr'),),
-                      ),
-                       SizedBox(
-                        height: 20,
-                      ),
-                      ElevatedButton(
-                        style: ButtonStyle(
-                          //overlayColor: MaterialStateProperty.all(Color.fromARGB(255, 255, 0, 0)),
-                          shadowColor: MaterialStateProperty.all(Color.fromARGB(255, 0, 0, 0)),
-                          backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 110, 108, 232)),
-                          minimumSize: MaterialStateProperty.all(const Size(250, 50)),
-                          textStyle: MaterialStateProperty.all(TextStyle(fontSize: 18)),
-                          shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          ),
-                          ),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context){
-                              return signin();
-
-                            })
-                          );
-                        },
-                        child: Text('เข้าสู่ระบบ',style: GoogleFonts.getFont('Mitr'),),
-                      ),
-                    ],
-                  )
-                ],
-              )));
-    
+      backgroundColor: Color.fromARGB(255, 19, 69, 118),
+      body: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(
+                height: 30,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(30.0),
+                child: Image.asset(
+                  'assets/sy.png',
+                  //color: Colors.white,
+                  height: 250,
+                  width: 250,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(30.0),
+                child: Container(
+                  width: 300,
+                  height: 100,
+                  alignment: Alignment.center,
+                  child: Text(
+                    'ยินดีต้อนรับสู่ทรัพย์ยั่งยืน กรุณากด สมัครสมาชิก เพื่อสมัครสมาชิก หรือ กด เข้าสู่ระบบ เพื่อเข้าสู่ระบบ',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 20,fontWeight: FontWeight.w200,color: Colors.white),
+                    
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 45,
+              ),
+              ElevatedButton(
+                style: ButtonStyle(
+                  //overlayColor: MaterialStateProperty.all(Color.fromARGB(255, 255, 0, 0)),
+                  shadowColor:
+                      MaterialStateProperty.all(Color.fromARGB(255, 0, 0, 0)),
+                  backgroundColor:
+                      MaterialStateProperty.all(Color.fromARGB(255, 3, 144, 0)),
+                  minimumSize: MaterialStateProperty.all(const Size(250, 50)),
+                  textStyle: MaterialStateProperty.all(TextStyle(fontSize: 18)),
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return signup();
+                  }));
+                },
+                child: Text(
+                  'สมัครสมาชิก',
+                  style: GoogleFonts.getFont('Mitr'),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                style: ButtonStyle(
+                  //overlayColor: MaterialStateProperty.all(Color.fromARGB(255, 255, 0, 0)),
+                  shadowColor:
+                      MaterialStateProperty.all(Color.fromARGB(255, 0, 0, 0)),
+                  backgroundColor: MaterialStateProperty.all(
+                      Color.fromARGB(255, 129, 198, 90)),
+                  minimumSize: MaterialStateProperty.all(const Size(250, 50)),
+                  textStyle: MaterialStateProperty.all(TextStyle(fontSize: 18)),
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return signin();
+                  }));
+                },
+                child: Text(
+                  'เข้าสู่ระบบ',
+                  style: GoogleFonts.getFont('Mitr'),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
