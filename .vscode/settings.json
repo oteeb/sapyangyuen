@@ -1,6 +1,11 @@
 {
     "cSpell.words": [
+        "apiprovince",
         "callprovinceitems",
-        "Getapi"
+        "Getapi",
+        "provincedata",
+        "provinceitems",
+        "provinceitemsapi",
+        "signin"
     ]
 }
