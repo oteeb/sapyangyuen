@@ -1,14 +1,12 @@
-import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'sign_in.dart';
-import 'package:sapyangyuen/api/callapi/callapi.dart';
-import 'package:sapyangyuen/api/model/model_province.dart';
 import 'dart:core';
+import 'package:sapyangyuen/pages/test.dart';
+import 'package:sapyangyuen/api/model/model_province.dart';
+import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
 
 class signup extends StatefulWidget {
   const signup({Key? key}) : super(key: key);
@@ -18,29 +16,13 @@ class signup extends StatefulWidget {
 }
 
 class _signupState extends State<signup> {
-  List<String> _provinceitems = [];
-  List<String> _districtitems = [];
-  List<String> _cantonsitems = [];
-
-  late final Future <List<ModelProvince>?> _modelProvinceData;
-
-  ProvinceDataApi() {
-    _modelProvinceData = CallAPI().GetapiProvince();
-    
-  }
-
-
-
-  @override
-  void initState() {
-    super.initState();
-    ProvinceDataApi();
-  }
-  final _formkey = GlobalKey<FormState>();
-
-  String? _provinceselected = null;
-  String? _districtselected = null;
-  String? _cantonselected = null;
+  var _provinceitems = [];
+  var _districtitems = [];
+  var _cantonsitems = [];
+  String? _provinceselected ;
+  String? _districtselected;
+  String? _cantonselected;
+  String? test = "";
 
   TextEditingController _firstNameController = TextEditingController();
   TextEditingController _lastNameController = TextEditingController();
@@ -49,6 +31,37 @@ class _signupState extends State<signup> {
   TextEditingController _housenumberController = TextEditingController();
   TextEditingController _postcodeController = TextEditingController();
 
+  // this will help to show the widget after
+  bool isprovinceSelected = false;
+  bool isStateSelected = false;
+  bool ispostcodeSelected = false;
+
+  late ModelProvince _dataproapi;
+
+  String url =
+      "https://raw.githubusercontent.com/dr5hn/countries-states-cities-database/master/countries%2Bstates%2Bcities.json";
+
+  //http get request to get data from the link
+  Future GetDataProvince() async {
+    var response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      var jsonResponse = convert.jsonDecode(response.body);
+      setState(() {
+        _provinceitems = jsonResponse;
+      });
+
+      print(_provinceitems);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    GetDataProvince();
+  }
+
+  final _formkey = GlobalKey<FormState>();
+
   final ButtonStyle style = ElevatedButton.styleFrom(
     textStyle: const TextStyle(fontSize: 20, fontFamily: 'Mitr'),
     fixedSize: const Size(250, 50),
@@ -56,379 +69,398 @@ class _signupState extends State<signup> {
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
   );
 
-   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: FutureBuilder(
-          future: _modelProvinceData,
-          builder: (context, AsyncSnapshot<List<ModelProvince>?> snapshot) {
-            final provincedata = snapshot.data;
-            print(snapshot.connectionState);
-            if (snapshot.hasData) {
-              
-              return ListView.builder(
-                  itemCount: snapshot.data!.length,
-                  //itemCount: json_Data == null ? 0 : json_Data.length,
-                  itemBuilder: (context, index) {
-                    final items = snapshot.data![index].id!.toString();
-                    
-                    return ListTile(
-                      onTap: () {
-                        
+      backgroundColor: Color.fromARGB(255, 154, 220, 255),
+      body: ListView(
+        children: [
+          SizedBox(
+            height: 20,
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: Image.asset(
+              'assets/sy.png',
+              width: 130,
+              fit: BoxFit.contain,
+            ),
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: Text(
+              'สมัครสมาชิก',
+              style: GoogleFonts.getFont('Mitr', fontSize: 30),
+            ),
+          ),
+          if (_provinceitems.isEmpty)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  height: 230,
+                ),
+                Text(
+                  'กำลังโหลด...',
+                  style: TextStyle(color: Colors.black, fontSize: 18),
+                ),
+                Container(
+                  height: 10,
+                ),
+                CircularProgressIndicator()
+              ],
+            )
+          else
+            Form(
+              key: _formkey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: TextFormField(
+                      controller: _firstNameController,
+                      decoration: InputDecoration(
+                        hintText: 'ชื่อ',
+                        labelText: "ชื่อ :",
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'กรุณากรอกชื่อ !';
+                        }
+                        return null;
                       },
-                      title: Text(snapshot.data![index].nameTh!),
-                      subtitle: Text(items),
-                    );
-                  });
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: TextFormField(
+                      controller: _lastNameController,
+                      decoration: InputDecoration(
+                        hintText: 'นามสกุล',
+                        labelText: "นามสกุล :",
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'กรุณากรอกนามสกุล !';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: TextFormField(
+                      controller: _idcardController,
+                      maxLength: 13,
+                      decoration: InputDecoration(
+                        hintText: 'หมายเลขบัตรประจำตัวประชาชน',
+                        labelText: "หมายเลขบัตรประจำตัวประชาชน :",
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                      ),
+                      keyboardType: TextInputType.number,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: TextFormField(
+                      controller: _phoneController,
+                      keyboardType: TextInputType.number,
+                      maxLength: 10,
+                      decoration: InputDecoration(
+                        hintText: 'เบอร์โทรศัพท์',
+                        labelText: "เบอร์โทรศัพท์ :",
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'กรุณากรอกเบอร์โทรศัพท์ !';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.all(10.0),
+                          height: 80,
+                          width: 180,
+                          child: TextFormField(
+                            controller: _housenumberController,
+                            decoration: InputDecoration(
+                              hintText: 'บ้านเลขที่',
+                              labelText: "บ้านเลขที่ :",
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          height: 80,
+                          width: 180,
+                          padding: const EdgeInsets.all(10.0),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButtonFormField2<String>(
+                              isDense: true,
+                              isExpanded: true,
+                              decoration: InputDecoration(
+                      
+                                labelText: "จังหวัด :",
+                                filled: true,
+                                fillColor: Colors.white,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                ),
+                              ),
+                              hint: Text(
+                                'เลือกจังหวัด',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Theme.of(context).hintColor,
+                                ),
+                              ),
+                              items: _provinceitems.map(
+                                (item) {
+                                  return DropdownMenuItem<String>(
+                                      value: item["name"],
+                                      child: Text(item["name"]));
+                                },
+                              ).toList(),
+                              value: _provinceselected,
+                              onChanged: (value) {
+                                setState(() {
+                                  _districtitems = [];
+                                  _provinceselected = value!;
+                                  for (int i = 0;
+                                      i < _provinceitems.length;
+                                      i++) {
+                                    if (_provinceitems[i]["name"] == value) {
+                                      _districtitems =
+                                          _provinceitems[i]["states"];
+                                    }
+                                  }
+                                  isprovinceSelected = true;
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (isprovinceSelected)
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Container(
+                            height: 80,
+                            width: 180,
+                            padding: const EdgeInsets.all(10.0),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButtonFormField2<String>(
+                                decoration: InputDecoration(
+                                  labelText: "อำเภอ :",
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                  ),
+                                ),
+                                hint: Text(
+                                  'เลือกอำเภอ',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Theme.of(context).hintColor,
+                                  ),
+                                ),
+                                isDense: true,
+                                isExpanded: true,
+                                items: _districtitems.map(
+                                  (dt) {
+                                    return DropdownMenuItem<String>(
+                                        value: dt["name"],
+                                        child: Text(dt["name"]));
+                                  },
+                                ).toList(),
+                                value: _districtselected,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _cantonsitems = [];
+                                    _districtselected = value!;
+                                    for (int i = 0;
+                                        i < _districtitems.length;
+                                        i++) {
+                                      if (_districtitems[i]["name"] == value) {
+                                        _cantonsitems =
+                                            _districtitems[i]["cities"];
+                                      }
+                                    }
+                                    isStateSelected = true;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            height: 80,
+                            width: 180,
+                            padding: const EdgeInsets.all(10.0),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButtonFormField2<String>(
+                                decoration: InputDecoration(
+                                  labelText: "ตำบล :",
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                  ),
+                                ),
+                                hint: Text(
+                                  'เลือกตำบล',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Theme.of(context).hintColor,
+                                  ),
+                                ),
+                                isDense: true,
+                                isExpanded: true,
+                                items: _cantonsitems.map((ct) {
+                                  return DropdownMenuItem<String>(
+                                      value: ct["name"],
+                                      child: Text(ct["name"]));
+                                }).toList(),
+                                value: _cantonselected,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _cantonselected = value!;
+                                    print(_cantonselected);
+                                    print(_postcodeController);
+                                    ispostcodeSelected = true;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  else
+                    Container(),
+                  if (ispostcodeSelected)
+                    Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.all(10.0),
+                          height: 100,
+                          width: 195,
+                          child: TextFormField(
+                            
+                            controller: _postcodeController..text = '$test',
+                            maxLength: 5,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              hintText: 'รหัสไปรษณีย์',
+                              labelText: "รหัสไปรษณีย์ :",
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.all(10.0),
+                          height: 80,
+                          width: 195,
+                        ),
+                      ),
+                    ],
+                  )
+                  else
+                    Container(),
+                  Container(
+                    padding: const EdgeInsets.all(10.0),
+                    alignment: Alignment.bottomLeft,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context)
+                            .pushReplacement(MaterialPageRoute(builder: (context) {
+                          return signin();
+                        }));
+                      },
+                      child: Text(
+                        'เข้าสู่ระบบ',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: ElevatedButton(
+                      style: style,
+                      onPressed: () {
+                        if (_formkey.currentState!.validate()) {
+                          final firstname = _firstNameController.text;
+                          final lastName = _lastNameController.text;
+                          final idcard = _idcardController.text;
+                          final phone = _phoneController.text;
+                          final housenumber = _housenumberController.text;
+                          final province = _provinceselected;
+                          final district = _districtselected;
+                          final canton = _cantonselected;
+                          final postcode = _postcodeController.text;
+                          
+                          print(_districtselected);
+                          print(firstname);
 
-            } else {
-              return Center(child: CircularProgressIndicator());
-
-            }
-          },
-        ),
-      );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('เรียบร้อย')),
+                          );
+                        }
+                      },
+                      child: const Text('สมัครสมาชิก'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
   }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     backgroundColor: Color.fromARGB(255, 154, 220, 255),
-  //     body: ListView(
-  //       children: [
-  //         SizedBox(
-  //           height: 20,
-  //         ),
-  //         Align(
-  //           alignment: Alignment.center,
-  //           child: Image.asset(
-  //             'assets/sy.png',
-  //             width: 130,
-  //             fit: BoxFit.contain,
-  //           ),
-  //         ),
-  //         Align(
-  //           alignment: Alignment.center,
-  //           child: Text(
-  //             'สมัครสมาชิก',
-  //             style: GoogleFonts.getFont('Mitr', fontSize: 30),
-  //           ),
-  //         ),
-  //         Form(
-  //           key: _formkey,
-  //           child: Column(
-  //             crossAxisAlignment: CrossAxisAlignment.center,
-  //             children: [
-  //               Padding(
-  //                 padding: const EdgeInsets.all(10.0),
-  //                 child: TextFormField(
-  //                   controller: _firstNameController,
-  //                   decoration: InputDecoration(
-  //                     labelText: "ชื่อ :",
-  //                     filled: true,
-  //                     fillColor: Colors.white,
-  //                     border: OutlineInputBorder(
-  //                       borderRadius: BorderRadius.circular(5.0),
-  //                     ),
-  //                   ),
-  //                   validator: (value) {
-  //                     if (value == null || value.isEmpty) {
-  //                       return 'กรุณากรอกชื่อ !';
-  //                     }
-  //                     return null;
-  //                   },
-  //                 ),
-  //               ),
-  //               Padding(
-  //                 padding: const EdgeInsets.all(10.0),
-  //                 child: TextFormField(
-  //                   controller: _lastNameController,
-  //                   decoration: InputDecoration(
-  //                     labelText: "นามสกุล :",
-  //                     filled: true,
-  //                     fillColor: Colors.white,
-  //                     border: OutlineInputBorder(
-  //                       borderRadius: BorderRadius.circular(5.0),
-  //                     ),
-  //                   ),
-  //                   validator: (value) {
-  //                     if (value == null || value.isEmpty) {
-  //                       return 'กรุณากรอกเบอร์นามสกุล !';
-  //                     }
-  //                     return null;
-  //                   },
-  //                 ),
-  //               ),
-  //               Padding(
-  //                 padding: const EdgeInsets.all(10.0),
-  //                 child: TextFormField(
-  //                   controller: _idcardController,
-  //                   maxLength: 13,
-  //                   decoration: InputDecoration(
-  //                     labelText: "หมายเลขบัตรประจำตัวประชาชน :",
-  //                     filled: true,
-  //                     fillColor: Colors.white,
-  //                     border: OutlineInputBorder(
-  //                       borderRadius: BorderRadius.circular(5.0),
-  //                     ),
-  //                   ),
-  //                   keyboardType: TextInputType.number,
-  //                 ),
-  //               ),
-  //               Padding(
-  //                 padding: const EdgeInsets.all(10.0),
-  //                 child: TextFormField(
-  //                   controller: _phoneController,
-  //                   keyboardType: TextInputType.number,
-  //                   maxLength: 10,
-  //                   decoration: InputDecoration(
-  //                     labelText: "เบอร์โทรศัพท์ :",
-  //                     filled: true,
-  //                     fillColor: Colors.white,
-  //                     border: OutlineInputBorder(
-  //                       borderRadius: BorderRadius.circular(5.0),
-  //                     ),
-  //                   ),
-  //                   validator: (value) {
-  //                     if (value == null || value.isEmpty) {
-  //                       return 'กรุณากรอกเบอร์โทรศัพท์ !';
-  //                     }
-  //                     return null;
-  //                   },
-  //                 ),
-  //               ),
-  //               Row(
-  //                 crossAxisAlignment: CrossAxisAlignment.center,
-  //                 children: [
-  //                   Expanded(
-  //                     child: Container(
-  //                       padding: const EdgeInsets.all(10.0),
-  //                       height: 80,
-  //                       width: 180,
-  //                       child: TextFormField(
-  //                         controller: _housenumberController,
-  //                         decoration: InputDecoration(
-  //                           labelText: "บ้านเลขที่ :",
-  //                           filled: true,
-  //                           fillColor: Colors.white,
-  //                           border: OutlineInputBorder(
-  //                             borderRadius: BorderRadius.circular(5.0),
-  //                           ),
-  //                         ),
-  //                       ),
-  //                     ),
-  //                   ),
-  //                   Expanded(
-  //                     child: Container(
-  //                       height: 80,
-  //                       width: 180,
-  //                       padding: const EdgeInsets.all(10.0),
-  //                       child: DropdownButtonHideUnderline(
-  //                         child: DropdownButtonFormField2(
-  //                           decoration: InputDecoration(
-  //                             labelText: "จังหวัด :",
-  //                             filled: true,
-  //                             fillColor: Colors.white,
-  //                             border: OutlineInputBorder(
-  //                               borderRadius: BorderRadius.circular(5.0),
-  //                             ),
-  //                           ),
-                            
-  //                           hint: Text(
-  //                             'เลือกจังหวัด',
-  //                             style: TextStyle(
-  //                               fontSize: 16,
-  //                               color: Theme.of(context).hintColor,
-  //                             ),
-  //                           ),
-  //                           items: _provinceitems.map(
-  //                             (item) {
-  //                               return DropdownMenuItem(
-  //                                 child: Text(
-  //                                   item,
-  //                                   style: const TextStyle(
-  //                                     fontSize: 16,
-  //                                   ),
-  //                                 ),
-  //                                 value: _provinceselected,
-  //                               );
-  //                             },
-  //                           ).toList(),
-                            
-  //                           onChanged: (value) {
-  //                             setState(() {
-  //                               _provinceselected = value as String;
-  //                               //print(selectedValue);
-  //                             });
-  //                           },
-  //                         ),
-  //                       ),
-  //                     ),
-  //                   ),
-  //                 ],
-  //               ),
-  //               Row(
-  //                 crossAxisAlignment: CrossAxisAlignment.center,
-  //                 children: [
-  //                   Expanded(
-  //                     child: Container(
-  //                       height: 80,
-  //                       width: 180,
-  //                       padding: const EdgeInsets.all(10.0),
-  //                       child: DropdownButtonHideUnderline(
-  //                         child: DropdownButtonFormField2(
-  //                           decoration: InputDecoration(
-  //                             labelText: "อำเภอ :",
-  //                             filled: true,
-  //                             fillColor: Colors.white,
-  //                             border: OutlineInputBorder(
-  //                               borderRadius: BorderRadius.circular(5.0),
-  //                             ),
-  //                           ),
-  //                           hint: Text(
-  //                             'เลือกอำเภอ',
-  //                             style: TextStyle(
-  //                               fontSize: 16,
-  //                               color: Theme.of(context).hintColor,
-  //                             ),
-  //                           ),
-  //                           items: _districtitems
-  //                               .map((item) => DropdownMenuItem<String>(
-  //                                     value: item,
-  //                                     child: Text(
-  //                                       item,
-  //                                       style: const TextStyle(
-  //                                         fontSize: 16,
-  //                                       ),
-  //                                     ),
-  //                                   ))
-  //                               .toList(),
-  //                           value: _districtselected,
-  //                           onChanged: (value) {
-  //                             setState(() {
-  //                               _districtselected = value as String;
-  //                               //print(selectedValue);
-  //                             });
-  //                           },
-  //                         ),
-  //                       ),
-  //                     ),
-  //                   ),
-  //                   Expanded(
-  //                     child: Container(
-  //                       height: 80,
-  //                       width: 180,
-  //                       padding: const EdgeInsets.all(10.0),
-  //                       child: DropdownButtonHideUnderline(
-  //                         child: DropdownButtonFormField2(
-  //                           decoration: InputDecoration(
-  //                             labelText: "ตำบล :",
-  //                             filled: true,
-  //                             fillColor: Colors.white,
-  //                             border: OutlineInputBorder(
-  //                               borderRadius: BorderRadius.circular(5.0),
-  //                             ),
-  //                           ),
-  //                           hint: Text(
-  //                             'เลือกตำบล',
-  //                             style: TextStyle(
-  //                               fontSize: 16,
-  //                               color: Theme.of(context).hintColor,
-  //                             ),
-  //                           ),
-  //                           items: _cantonsitems
-  //                               .map((item) => DropdownMenuItem<String>(
-  //                                     value: item,
-  //                                     child: Text(
-  //                                       item,
-  //                                       style: const TextStyle(
-  //                                         fontSize: 16,
-  //                                       ),
-  //                                     ),
-  //                                   ))
-  //                               .toList(),
-  //                           value: _cantonselected,
-  //                           onChanged: (value) {
-  //                             setState(() {
-  //                               _cantonselected = value as String;
-  //                               //print(selectedValue);
-  //                             });
-  //                           },
-  //                         ),
-  //                       ),
-  //                     ),
-  //                   ),
-  //                 ],
-  //               ),
-  //               Row(
-  //                 crossAxisAlignment: CrossAxisAlignment.center,
-  //                 children: [
-  //                   Expanded(
-  //                     child: Container(
-  //                       padding: const EdgeInsets.all(10.0),
-  //                       height: 100,
-  //                       width: 195,
-  //                       child: TextFormField(
-  //                         maxLength: 5,
-  //                         keyboardType: TextInputType.number,
-  //                         decoration: InputDecoration(
-  //                           labelText: "รหัสไปรษณีย์ :",
-  //                           filled: true,
-  //                           fillColor: Colors.white,
-  //                           border: OutlineInputBorder(
-  //                             borderRadius: BorderRadius.circular(5.0),
-  //                           ),
-  //                         ),
-  //                       ),
-  //                     ),
-  //                   ),
-  //                   Expanded(
-  //                     child: Container(
-  //                       padding: const EdgeInsets.all(10.0),
-  //                       height: 80,
-  //                       width: 195,
-  //                     ),
-  //                   ),
-  //                 ],
-  //               ),
-  //               Container(
-  //                 padding: const EdgeInsets.all(10.0),
-  //                 alignment: Alignment.bottomLeft,
-  //                 child: GestureDetector(
-  //                   onTap: () {
-  //                     Navigator.of(context)
-  //                         .push(MaterialPageRoute(builder: (context) {
-  //                       return signin();
-  //                     }));
-  //                   },
-  //                   child: Text(
-  //                     'เข้าสู่ระบบ',
-  //                     style: TextStyle(fontSize: 18),
-  //                   ),
-  //                 ),
-  //               ),
-  //               Padding(
-  //                 padding: const EdgeInsets.all(10.0),
-  //                 child: ElevatedButton(
-  //                   style: style,
-  //                   onPressed: () {
-  //                     if (_formkey.currentState!.validate()) {
-  //                       final name = _firstNameController.text;
-  //                       print(_provinceselected);
-
-  //                       ScaffoldMessenger.of(context).showSnackBar(
-  //                         const SnackBar(content: Text('โอเค')),
-  //                       );
-  //                     }
-  //                   },
-  //                   child: const Text('สมัครสมาชิก'),
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
 }

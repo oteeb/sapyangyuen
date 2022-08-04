@@ -13,7 +13,9 @@ class _profileState extends State<profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(child: Text('profile'),),
+      body: Container(
+        color: Colors.black12,
+      ),
     );
   }
 }

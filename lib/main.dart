@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'pages/home_page.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+
 
 
 void main() {
@@ -21,6 +23,7 @@ class MyApp extends StatelessWidget {
         
       ),
       home: const homepage(),
+      builder: EasyLoading.init(),
     );
   }
 }

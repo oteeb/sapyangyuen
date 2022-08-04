@@ -1,39 +1,89 @@
-// To parse this JSON data, do
-//
-//     final modelProvince = modelProvinceFromJson(jsonString);
-
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
-List<ModelProvince>? modelProvinceFromJson(String str) => List<ModelProvince>.from(json.decode(str).map((x) => ModelProvince.fromJson(x)));
+List<ModelProvince> modelProvinceFromJson(String str) => List<ModelProvince>.from(json.decode(str).map((x) => ModelProvince.fromJson(x)));
+
+String modelProvinceToJson(List<ModelProvince> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class ModelProvince {
     ModelProvince({
-        @required this.id,
-        @required this.nameTh,
-        @required this.nameEn,
-        @required this.geographyId,
-        @required this.createdAt,
-        @required this.updatedAt,
-        @required this.deletedAt,
+        this.id,
+        this.nameTh,
+        this.nameEn,
+        this.geographyId,
+        this.createdAt,
+        this.updatedAt,
+        this.deletedAt,
     });
 
-    final int? id;
-    final String? nameTh;
-    final String? nameEn;
-    final int? geographyId;
-    final String? createdAt;
-    final String? updatedAt;
-    final dynamic deletedAt;
+    int? id;
+    String? nameTh;
+    String? nameEn;
+    int? geographyId;
+    String? createdAt;
+    String? updatedAt;
+    dynamic deletedAt;
 
     factory ModelProvince.fromJson(Map<String, dynamic> json) => ModelProvince(
-        id: json["id"] == null ? null : json["id"],
-        nameTh: json["name_th"] == null ? null : json["name_th"],
-        nameEn: json["name_en"] == null ? null : json["name_en"],
-        geographyId: json["geography_id"] == null ? null : json["geography_id"],
-        createdAt: json["created_at"] == null ? null : json["created_at"],
-        updatedAt: json["updated_at"] == null ? null : json["updated_at"],
+        id: json["id"],
+        nameTh: json["name_th"],
+        nameEn: json["name_en"],
+        geographyId: json["geography_id"],
+        createdAt: json["created_at"],
+        updatedAt: json["updated_at"],
         deletedAt: json["deleted_at"],
     );
 
+    Map<String, dynamic> toJson() => {
+        "id": id,
+        "name_th": nameTh,
+        "name_en": nameEn,
+        "geography_id": geographyId,
+        "created_at": createdAt,
+        "updated_at": updatedAt,
+        "deleted_at": deletedAt,
+    };
 }
+
+
+
+
+// class ModelProvince {
+//   int? id;
+//   String? nameTh;
+//   String? nameEn;
+//   int? geographyId;
+//   String? createdAt;
+//   String? updatedAt;
+//   Null? deletedAt;
+
+//   ModelProvince(
+//       {this.id,
+//       this.nameTh,
+//       this.nameEn,
+//       this.geographyId,
+//       this.createdAt,
+//       this.updatedAt,
+//       this.deletedAt});
+
+//   ModelProvince.fromJson(Map<String, dynamic> json) {
+//     id = json['id'];
+//     nameTh = json['name_th'];
+//     nameEn = json['name_en'];
+//     geographyId = json['geography_id'];
+//     createdAt = json['created_at'];
+//     updatedAt = json['updated_at'];
+//     deletedAt = json['deleted_at'];
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['id'] = this.id;
+//     data['name_th'] = this.nameTh;
+//     data['name_en'] = this.nameEn;
+//     data['geography_id'] = this.geographyId;
+//     data['created_at'] = this.createdAt;
+//     data['updated_at'] = this.updatedAt;
+//     data['deleted_at'] = this.deletedAt;
+//     return data;
+//   }
+// }

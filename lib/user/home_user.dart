@@ -4,6 +4,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'profile.dart';
+import 'home.dart';
 
 class homeuser extends StatefulWidget {
   const homeuser({Key? key}) : super(key: key);
@@ -15,9 +16,10 @@ class homeuser extends StatefulWidget {
 class _homeuserState extends State<homeuser> {
   int screensindex = 0;
   final screens = [
+    Home(),
+    Center(child: Text('Calendar'),),
     profile(),
-    Center(child: Text('test1'),),
-    Center(child: Text('test2'),),
+    Center(child: Text('Discovery'),),
   ];
   @override
   Widget build(BuildContext context) {
@@ -25,14 +27,31 @@ class _homeuserState extends State<homeuser> {
       appBar: AppBar(
         title: Text('Homeuser',style: TextStyle(color: Colors.black),),
         backgroundColor: Colors.white,
+        elevation: 0,
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+              icon: const Icon(Icons.logout),
+              color: Colors.black,
+              tooltip: 'Logout',
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('This is a Logout')));
+              },
+            ),
+          ),
+        ],
       ),
       body: screens[screensindex],
         bottomNavigationBar: ConvexAppBar(
           
       items: [
-        TabItem(icon: Icons.home, title: 'Home'),
-        TabItem(icon: Icons.map, title: 'Discovery'),
-        TabItem(icon: Icons.person, title: 'Profile'),
+        TabItem(icon: Icons.home, title: 'หน้าหลัก'),
+        TabItem(icon: Icons.calendar_month, title: 'ปฏิทิน'),
+        TabItem(icon: Icons.person, title: 'โปรไฟล์'),
+        TabItem(icon: Icons.contacts, title: 'การติดต่อ'),
+        
       ],
       initialActiveIndex: screensindex, //optional, default as 0
       onTap: (index) => setState(() => screensindex = index),

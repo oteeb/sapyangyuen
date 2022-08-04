@@ -66,8 +66,8 @@ class homepage extends StatelessWidget {
                 ),
                 onPressed: () {
                   Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) {
-                    return signup();
+                      .pushReplacement(MaterialPageRoute(builder: (context) {
+                    return homeuser();
                   }));
                 },
                 child: Text(
