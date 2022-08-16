@@ -13,7 +13,7 @@ class homepage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 19, 69, 118),
+      backgroundColor: Color.fromARGB(255, 40, 54, 176),
       body: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -25,11 +25,14 @@ class homepage extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.all(30.0),
-                child: Image.asset(
-                  'assets/sy.png',
-                  //color: Colors.white,
-                  height: 250,
-                  width: 250,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: Image.asset(
+                    'assets/img/sy1.jpg',
+                    height: 250,
+                    width: 280,
+                    fit: BoxFit.fill,
+                  ),
                 ),
               ),
               Padding(
@@ -41,8 +44,10 @@ class homepage extends StatelessWidget {
                   child: Text(
                     'ยินดีต้อนรับสู่ทรัพย์ยั่งยืน กรุณากด สมัครสมาชิก เพื่อสมัครสมาชิก หรือ กด เข้าสู่ระบบ เพื่อเข้าสู่ระบบ',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 20,fontWeight: FontWeight.w200,color: Colors.white),
-                    
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w200,
+                        color: Colors.white),
                   ),
                 ),
               ),
@@ -54,8 +59,8 @@ class homepage extends StatelessWidget {
                   //overlayColor: MaterialStateProperty.all(Color.fromARGB(255, 255, 0, 0)),
                   shadowColor:
                       MaterialStateProperty.all(Color.fromARGB(255, 0, 0, 0)),
-                  backgroundColor:
-                      MaterialStateProperty.all(Color.fromARGB(255, 3, 144, 0)),
+                  backgroundColor: MaterialStateProperty.all(
+                      Color.fromARGB(255, 159, 121, 24)),
                   minimumSize: MaterialStateProperty.all(const Size(250, 50)),
                   textStyle: MaterialStateProperty.all(TextStyle(fontSize: 18)),
                   shape: MaterialStateProperty.all(
@@ -84,7 +89,7 @@ class homepage extends StatelessWidget {
                   shadowColor:
                       MaterialStateProperty.all(Color.fromARGB(255, 0, 0, 0)),
                   backgroundColor: MaterialStateProperty.all(
-                      Color.fromARGB(255, 129, 198, 90)),
+                      Color.fromARGB(255, 218, 165, 32)),
                   minimumSize: MaterialStateProperty.all(const Size(250, 50)),
                   textStyle: MaterialStateProperty.all(TextStyle(fontSize: 18)),
                   shape: MaterialStateProperty.all(

@@ -22,29 +22,32 @@ class _signinState extends State<signin> {
   final ButtonStyle style = ElevatedButton.styleFrom(
     textStyle: const TextStyle(fontSize: 20, fontFamily: 'Mitr'),
     fixedSize: const Size(250, 50),
-    primary: Color.fromARGB(255, 75, 116, 158),
+    primary: Color.fromARGB(255, 218, 165, 32),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
   );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 153, 218, 253),
+      backgroundColor: Color.fromARGB(255, 40, 54, 176),
       body: SingleChildScrollView(
         child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.all(30.0),
-              child: Image.asset(
-                'assets/sy.png',
-                //color: Colors.white,
-                height: 250,
-                width: 250,
-              ),
+              child: ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: Image.asset(
+                    'assets/img/sy1.jpg',
+                    height: 250,
+                    width: 280,
+                    fit: BoxFit.fill,
+                  ),
+                ),
             ),
             Text(
               'เข้าสู่ระบบ',
-              style: TextStyle(fontSize: 30),
+              style: TextStyle(fontSize: 30, color: Colors.white),
             ),
             SizedBox(
               height: 40,
@@ -143,7 +146,7 @@ class _signinState extends State<signin> {
                           },
                           child: Text(
                             'สมัครสมาชิก',
-                            style: TextStyle(fontSize: 18),
+                            style: TextStyle(fontSize: 18, color: Colors.white),
                           ),
                         ),
                       )),
@@ -155,13 +158,13 @@ class _signinState extends State<signin> {
                         child: GestureDetector(
                           onTap: () {
                             Navigator.of(context)
-                                .pushReplacement(MaterialPageRoute(builder: (context) {
+                                .push(MaterialPageRoute(builder: (context) {
                               return signup();
                             }));
                           },
                           child: Text(
                             'ลืมรหัสผ่าน ?',
-                            style: TextStyle(fontSize: 18),
+                            style: TextStyle(fontSize: 18, color: Colors.white),
                             textAlign: TextAlign.end,
                           ),
                         ),

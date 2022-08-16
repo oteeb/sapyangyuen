@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:sapyangyuen/intro_screens/introduction_screens.dart';
 import 'pages/home_page.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
@@ -18,11 +19,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "Welcome to Sapyangyuen",
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        //primarySwatch: Colors.blue,
         fontFamily: 'Mitr',
         
       ),
-      home: const homepage(),
+      home: IntroductionScreens(),
       builder: EasyLoading.init(),
     );
   }

@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'sign_in.dart';
 import 'dart:core';
-import 'package:sapyangyuen/pages/test.dart';
 import 'package:sapyangyuen/api/model/model_province.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
@@ -19,7 +18,7 @@ class _signupState extends State<signup> {
   var _provinceitems = [];
   var _districtitems = [];
   var _cantonsitems = [];
-  String? _provinceselected ;
+  String? _provinceselected;
   String? _districtselected;
   String? _cantonselected;
   String? test = "";
@@ -65,14 +64,14 @@ class _signupState extends State<signup> {
   final ButtonStyle style = ElevatedButton.styleFrom(
     textStyle: const TextStyle(fontSize: 20, fontFamily: 'Mitr'),
     fixedSize: const Size(250, 50),
-    primary: Color.fromARGB(255, 26, 62, 110),
+    primary: Color.fromARGB(255, 159, 121, 24),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
   );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 154, 220, 255),
+      backgroundColor: Color.fromARGB(255, 40, 54, 176),
       body: ListView(
         children: [
           SizedBox(
@@ -80,17 +79,20 @@ class _signupState extends State<signup> {
           ),
           Align(
             alignment: Alignment.center,
-            child: Image.asset(
-              'assets/sy.png',
-              width: 130,
-              fit: BoxFit.contain,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Image.asset(
+                'assets/img/sy1.jpg',
+                width: 130,
+                fit: BoxFit.fill,
+              ),
             ),
           ),
           Align(
             alignment: Alignment.center,
             child: Text(
               'สมัครสมาชิก',
-              style: GoogleFonts.getFont('Mitr', fontSize: 30),
+              style: GoogleFonts.getFont('Mitr', fontSize: 30, color: Color.fromARGB(255, 255, 246, 246)),
             ),
           ),
           if (_provinceitems.isEmpty)
@@ -230,7 +232,6 @@ class _signupState extends State<signup> {
                               isDense: true,
                               isExpanded: true,
                               decoration: InputDecoration(
-                      
                                 labelText: "จังหวัด :",
                                 filled: true,
                                 fillColor: Colors.white,
@@ -377,40 +378,38 @@ class _signupState extends State<signup> {
                     Container(),
                   if (ispostcodeSelected)
                     Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.all(10.0),
-                          height: 100,
-                          width: 195,
-                          child: TextFormField(
-                            
-                            controller: _postcodeController..text = '$test',
-                            maxLength: 5,
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              hintText: 'รหัสไปรษณีย์',
-                              labelText: "รหัสไปรษณีย์ :",
-                              filled: true,
-                              fillColor: Colors.white,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5.0),
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.all(10.0),
+                            height: 100,
+                            width: 195,
+                            child: TextFormField(
+                              controller: _postcodeController..text = '$test',
+                              maxLength: 5,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                hintText: 'รหัสไปรษณีย์',
+                                labelText: "รหัสไปรษณีย์ :",
+                                filled: true,
+                                fillColor: Colors.white,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.all(10.0),
-                          height: 80,
-                          width: 195,
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.all(10.0),
+                            height: 80,
+                            width: 195,
+                          ),
                         ),
-                      ),
-                    ],
-                  )
+                      ],
+                    )
                   else
                     Container(),
                   Container(
@@ -418,14 +417,14 @@ class _signupState extends State<signup> {
                     alignment: Alignment.bottomLeft,
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.of(context)
-                            .pushReplacement(MaterialPageRoute(builder: (context) {
+                        Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: (context) {
                           return signin();
                         }));
                       },
                       child: Text(
                         'เข้าสู่ระบบ',
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(fontSize: 18, color: Colors.white),
                       ),
                     ),
                   ),
@@ -444,7 +443,7 @@ class _signupState extends State<signup> {
                           final district = _districtselected;
                           final canton = _cantonselected;
                           final postcode = _postcodeController.text;
-                          
+
                           print(_districtselected);
                           print(firstname);
 
