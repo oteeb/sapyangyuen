@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
-class profile extends StatefulWidget {
-  const profile({Key? key}) : super(key: key);
+class contact extends StatefulWidget {
+  const contact({Key? key}) : super(key: key);
 
   @override
-  State<profile> createState() => _profileState();
+  State<contact> createState() => _contactState();
 }
 
-class _profileState extends State<profile> {
+class _contactState extends State<contact> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:sapyangyuen/user/calendar.dart';
+import 'package:sapyangyuen/user/contact.dart';
 import 'profile.dart';
 import 'home.dart';
 
@@ -17,13 +19,9 @@ class _homeuserState extends State<homeuser> {
   int screensindex = 0;
   final screens = [
     Home(),
-    Center(
-      child: Text('Calendar'),
-    ),
+    calendar(),
     profile(),
-    Center(
-      child: Text('Discovery'),
-    ),
+    contact(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -31,7 +29,7 @@ class _homeuserState extends State<homeuser> {
     return Scaffold(
         appBar: AppBar(
           title: Text('Homeuser',style: TextStyle(color: Colors.black),),
-          backgroundColor: Colors.white,
+          backgroundColor: Color.fromARGB(255, 255, 255, 255),
           elevation: 0,
           actions: <Widget>[
             Padding(

@@ -59,7 +59,7 @@ class _IntroductionScreensState extends State<IntroductionScreens> {
                     ? GestureDetector(
                         onTap: () {
                           Navigator.of(context)
-                              .push(MaterialPageRoute(builder: (context) {
+                              .pushReplacement(MaterialPageRoute(builder: (context) {
                             return homepage();
                           }));
                         },

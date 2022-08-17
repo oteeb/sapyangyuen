@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Mitr',
         
       ),
+      debugShowCheckedModeBanner: false,
       home: IntroductionScreens(),
       builder: EasyLoading.init(),
     );

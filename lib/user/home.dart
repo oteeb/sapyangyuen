@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:sapyangyuen/api/callapi/callapi.dart';
 import 'package:sapyangyuen/api/model/model_province.dart';
+import 'package:sapyangyuen/user/video_player.dart';
 import 'dart:convert';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -17,6 +18,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int activeindex = 0;
+  bool img_vdo = false;
 
   late final Future<List<ModelProvince>?> _modelProvinceData;
 
@@ -33,11 +35,10 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 173, 173, 173),
+      backgroundColor: Color.fromARGB(255, 197, 197, 197),
       body: FutureBuilder(
         future: _modelProvinceData,
         builder: (context, AsyncSnapshot<List<ModelProvince>?> snapshot) {
-
           if (snapshot.hasData) {
             return ListView.builder(
                 itemCount: snapshot.data!.length,
@@ -86,46 +87,62 @@ class _HomeState extends State<Home> {
                               SizedBox(
                                 height: 10,
                               ),
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 7.0),
-                                    child: Container(
-                                      width: 380,
-                                      child: Text(
-                                        'ddfdsfdfsdfdsfzdsvzdsssssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaasssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssvzdvzdvdvdvzdvzdvzvdvdcsdcsdzdvzdvzsdvdsvdszgdfgdtrhdtfhxfhgfhdfhdta',
-                                        style: TextStyle(),
-                                      ),
-                                    ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 7.0),
+                                child: Container(
+                                  width: 380,
+                                  child: Text(
+                                    'ddfdsfdfsdfdsfzdsvzdsssssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaasssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssvzdvzdvdvdvzdvzdvzvdvdcsdcsdzdvzdvzsdvdsvdszgdfgdtrhdtfhxfhgfhdfhdta',
+                                    style: TextStyle(),
                                   ),
-                                ],
+                                ),
                               ),
                               SizedBox(
                                 height: 10,
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(5.0),
-                                child: CarouselSlider.builder(
-                                  options: CarouselOptions(
-                                    height: 400,
-                                    
-                                    autoPlay: true,
-                                    enlargeCenterPage: true,
-                                    viewportFraction: 1.0,
-                                    enableInfiniteScroll: true,
-                                    onPageChanged: (index, reason) =>
-                                        setState(() => activeindex = index),
-                                  ),
-                                  itemCount: snapshot.data!.length,
-                                  itemBuilder: (BuildContext context,
-                                          int itemIndex, int pageViewIndex) =>
-                                      Container(
-                                    width: 400,
-                                    child: Image.network(
-                                      "https://www.tesla.com/sites/default/files/images/roadster/roadster-social.jpg",
-                                      fit: BoxFit.cover,
+                              CarouselSlider.builder(
+                                options: CarouselOptions(
+                                  height: 400,
+                                  autoPlay: true,
+                                  viewportFraction: 1.0,
+                                  enableInfiniteScroll: true,
+                                  onPageChanged: (index, reason) =>
+                                      setState(() => activeindex = index),
+                                ),
+                                itemCount: snapshot.data!.length,
+                                itemBuilder: (BuildContext context,
+                                        int itemIndex, int pageViewIndex) =>
+                                    Stack(
+                                  children: <Widget>[
+                                    Container(
+                                      color: Color.fromARGB(255, 37, 147, 153),
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.65,
+                                      width: MediaQuery.of(context).size.width,
+                                      //child: Text("itemIndex.toString()"),
                                     ),
-                                  ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: Align(
+                                        alignment: Alignment.topRight,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          child: Container(
+                                            color:
+                                                Color.fromARGB(77, 50, 71, 72),
+                                            height: 20.0,
+                                            width: 45.0,
+                                            child: Text(
+                                              '${itemIndex + 1}/${snapshot.data!.length.toString()}',
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                               SizedBox(
@@ -135,7 +152,7 @@ class _HomeState extends State<Home> {
                                 alignment: Alignment.center,
                                 child: AnimatedSmoothIndicator(
                                   activeIndex: activeindex,
-                                  count: snapshot.data!.length,
+                                  count: 5,
                                   effect: ScrollingDotsEffect(),
                                 ),
                               ),
@@ -145,6 +162,15 @@ class _HomeState extends State<Home> {
                             ],
                           ),
                         ),
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+
+                      videoPlayer(),
+
+                      SizedBox(
+                        height: 8,
                       ),
                     ],
                   );
