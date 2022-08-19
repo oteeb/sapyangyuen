@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/foundation/key.dart';
+import 'package:lottie/lottie.dart';
 import 'package:sapyangyuen/api/callapi/callapi.dart';
 import 'package:sapyangyuen/api/model/model_province.dart';
 import 'package:sapyangyuen/user/video_player.dart';
@@ -152,7 +153,7 @@ class _HomeState extends State<Home> {
                                 alignment: Alignment.center,
                                 child: AnimatedSmoothIndicator(
                                   activeIndex: activeindex,
-                                  count: 5,
+                                  count: snapshot.data!.length,
                                   effect: ScrollingDotsEffect(),
                                 ),
                               ),
@@ -167,7 +168,7 @@ class _HomeState extends State<Home> {
                         height: 8,
                       ),
 
-                      videoPlayer(),
+                      //videoPlayer(),
 
                       SizedBox(
                         height: 8,
@@ -181,7 +182,8 @@ class _HomeState extends State<Home> {
                   // );
                 });
           } else {
-            return Center(child: CircularProgressIndicator());
+            return Center(child: Lottie.network(
+                'https://assets8.lottiefiles.com/packages/lf20_a2chheio.json'),);
           }
         },
       ),

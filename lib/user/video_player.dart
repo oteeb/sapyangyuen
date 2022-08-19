@@ -20,7 +20,6 @@ class _videoPlayerState extends State<videoPlayer> {
 
     chewieController = ChewieController(
       videoPlayerController: videoPlayerController,
-      
       autoPlay: true,
       looping: true,
       aspectRatio: 12 / 9,
@@ -53,13 +52,6 @@ class _videoPlayerState extends State<videoPlayer> {
   }
 
   @override
-  void dispose() {
-    videoPlayerController.dispose();
-    chewieController?.dispose();
-    super.dispose();
-  }
-
-  @override
   void initState() {
     super.initState();
     _initPlayer();
@@ -82,5 +74,12 @@ class _videoPlayerState extends State<videoPlayer> {
               child: CircularProgressIndicator(),
             ),
     );
+  }
+
+  @override
+  void dispose() {
+    videoPlayerController.dispose();
+    chewieController?.dispose();
+    super.dispose();
   }
 }

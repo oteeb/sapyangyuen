@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:sapyangyuen/api/callapi/callapi.dart';
 import 'sign_in.dart';
 import 'dart:core';
 import 'package:sapyangyuen/api/model/model_province.dart';
@@ -30,12 +32,41 @@ class _signupState extends State<signup> {
   TextEditingController _housenumberController = TextEditingController();
   TextEditingController _postcodeController = TextEditingController();
 
+  _register() async {
+    Map<String, String> data = {
+      "name": "${_firstNameController.text}",
+      "familyName": "${_lastNameController.text}",
+      //'"cardId"':'"${_idcardController.text}"',
+      "phone": _phoneController.text,
+      //'"houseNumber"':'"${_housenumberController.text}"',
+      // '"province"':'"${_provinceselected}"',
+      // '"amphur"':'"${_districtselected}"',
+      // '"district"':'"${_cantonselected}"',
+      //'"postcode"':'"${_postcodeController.text}"',
+    };
+    var res = await CallAPI().postRegister(data, 'register');
+
+    var body = convert.jsonDecode(res!.body);
+    var dataregister = body;
+    print(dataregister['message']);
+    if (res.statusCode == 200) {
+      EasyLoading.showSuccess('${dataregister['message']}');
+    //   Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
+    //     return signin();
+    // }));
+    } else {
+      EasyLoading.showInfo('${dataregister['message']}');
+      
+    }
+    
+  }
+
   // this will help to show the widget after
   bool isprovinceSelected = false;
   bool isStateSelected = false;
   bool ispostcodeSelected = false;
 
-  late ModelProvince _dataproapi;
+  //late ModelProvince _dataproapi;
 
   String url =
       "https://raw.githubusercontent.com/dr5hn/countries-states-cities-database/master/countries%2Bstates%2Bcities.json";
@@ -92,7 +123,8 @@ class _signupState extends State<signup> {
             alignment: Alignment.center,
             child: Text(
               'สมัครสมาชิก',
-              style: GoogleFonts.getFont('Mitr', fontSize: 30, color: Color.fromARGB(255, 255, 246, 246)),
+              style: GoogleFonts.getFont('Mitr',
+                  fontSize: 30, color: Color.fromARGB(255, 255, 246, 246)),
             ),
           ),
           if (_provinceitems.isEmpty)
@@ -123,8 +155,8 @@ class _signupState extends State<signup> {
                     child: TextFormField(
                       controller: _firstNameController,
                       decoration: InputDecoration(
-                        hintText: 'ชื่อ',
-                        labelText: "ชื่อ :",
+                        hintText: 'ชื่อ *',
+                        labelText: "ชื่อ * :",
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
@@ -135,6 +167,11 @@ class _signupState extends State<signup> {
                         if (value == null || value.isEmpty) {
                           return 'กรุณากรอกชื่อ !';
                         }
+                        final nameRegExp = RegExp(r"^[a-zA-Zก-๏\s]+$");
+                        var namevalue = value;
+                        if (!nameRegExp.hasMatch(namevalue)) {
+                          return 'กรุณากรอกชื่อที่มีแต่ตัวอักษร !';
+                        }
                         return null;
                       },
                     ),
@@ -144,8 +181,8 @@ class _signupState extends State<signup> {
                     child: TextFormField(
                       controller: _lastNameController,
                       decoration: InputDecoration(
-                        hintText: 'นามสกุล',
-                        labelText: "นามสกุล :",
+                        hintText: 'นามสกุล *',
+                        labelText: "นามสกุล * :",
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
@@ -155,6 +192,11 @@ class _signupState extends State<signup> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'กรุณากรอกนามสกุล !';
+                        }
+                        final lastNameRegExp = RegExp(r"^[a-zA-Zก-๏\s]+$");
+                        var lastNamevalue = value;
+                        if (!lastNameRegExp.hasMatch(lastNamevalue)) {
+                          return 'กรุณากรอกชื่อที่มีแต่ตัวอักษร !';
                         }
                         return null;
                       },
@@ -184,8 +226,8 @@ class _signupState extends State<signup> {
                       keyboardType: TextInputType.number,
                       maxLength: 10,
                       decoration: InputDecoration(
-                        hintText: 'เบอร์โทรศัพท์',
-                        labelText: "เบอร์โทรศัพท์ :",
+                        hintText: 'เบอร์โทรศัพท์ *',
+                        labelText: "เบอร์โทรศัพท์ * :",
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
@@ -195,6 +237,17 @@ class _signupState extends State<signup> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'กรุณากรอกเบอร์โทรศัพท์ !';
+                        }
+                        if (value.length < 10) {
+                          return 'กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก !';
+                        }
+                        final phoneRegExp = RegExp(r"^(?:[+0]9)?[0-9]{10}$");
+                        var phonevalue = value;
+                        if (!phoneRegExp.hasMatch(phonevalue)) {
+                          return 'เบอร์โทรศัพท์ต้องมีตัวเลข 0-9 เท่านั้น !';
+                        }
+                        if (value.contains(" ")) {
+                          return 'เบอร์โทรศัพท์ต้องไม่มีช่องว่าง !';
                         }
                         return null;
                       },
@@ -363,8 +416,7 @@ class _signupState extends State<signup> {
                                 onChanged: (value) {
                                   setState(() {
                                     _cantonselected = value!;
-                                    print(_cantonselected);
-                                    print(_postcodeController);
+
                                     ispostcodeSelected = true;
                                   });
                                 },
@@ -443,13 +495,16 @@ class _signupState extends State<signup> {
                           final district = _districtselected;
                           final canton = _cantonselected;
                           final postcode = _postcodeController.text;
-
-                          print(_districtselected);
-                          print(firstname);
-
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('เรียบร้อย')),
-                          );
+                          if (firstname == null &&
+                              lastName == null &&
+                              phone == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('กรุณากรอกข้อมูล !')),
+                            );
+                          } else {
+                            _register();
+                          }
                         }
                       },
                       child: const Text('สมัครสมาชิก'),

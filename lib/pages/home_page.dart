@@ -5,7 +5,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'sign_up.dart';
 import 'sign_in.dart';
-import 'package:sapyangyuen/user/home_user.dart';
+
 
 class homepage extends StatelessWidget {
   const homepage({Key? key}) : super(key: key);
@@ -72,7 +72,7 @@ class homepage extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context)
                       .pushReplacement(MaterialPageRoute(builder: (context) {
-                    return homeuser();
+                    return signup();
                   }));
                 },
                 child: Text(
