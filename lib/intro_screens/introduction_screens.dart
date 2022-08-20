@@ -1,9 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:sapyangyuen/intro_screens/intro_page1.dart';
 import 'package:sapyangyuen/intro_screens/intro_page2.dart';
 import 'package:sapyangyuen/pages/home_page.dart';
+import 'package:sapyangyuen/pages/sign_in.dart';
+import 'package:sapyangyuen/user/home_user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class IntroductionScreens extends StatefulWidget {
@@ -14,6 +20,52 @@ class IntroductionScreens extends StatefulWidget {
 }
 
 class _IntroductionScreensState extends State<IntroductionScreens> {
+  String? finatoken;
+  Future getdatasharedPreferences() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    var datatoken = sharedPreferences.getString('token');
+
+    setState(() {
+      finatoken = datatoken;
+    });
+    if (finatoken == null) {
+      
+    } else {
+      
+    }
+    print(finatoken);
+  }
+
+  void _nextIntroductionScreens() async {
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
+      return IntroductionScreens();
+    }));
+  }
+
+  void _nexthomeuser() async {
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
+      return homeuser();
+    }));
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //getdatasharedPreferences();
+    getdatasharedPreferences().whenComplete(() async {
+      Timer(
+          Duration(seconds: 2),
+          () => finatoken == null
+              ? Container()
+              : Navigator.of(context)
+                  .pushReplacement(MaterialPageRoute(builder: (context) {
+                  return homeuser();
+                })));
+    });
+  }
+
   PageController _controller = PageController();
   bool onLastPage = false;
   @override
@@ -58,8 +110,8 @@ class _IntroductionScreensState extends State<IntroductionScreens> {
                 onLastPage
                     ? GestureDetector(
                         onTap: () {
-                          Navigator.of(context)
-                              .pushReplacement(MaterialPageRoute(builder: (context) {
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(builder: (context) {
                             return homepage();
                           }));
                         },

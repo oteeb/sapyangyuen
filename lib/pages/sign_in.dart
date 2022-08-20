@@ -2,8 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:sapyangyuen/api/callapi/callapi.dart';
+import 'package:sapyangyuen/user/home_user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'home_page.dart';
 import 'sign_up.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'dart:convert' as convert;
 
 class signin extends StatefulWidget {
   const signin({Key? key}) : super(key: key);
@@ -18,6 +23,34 @@ class _signinState extends State<signin> {
 
   TextEditingController _firstNameController = TextEditingController();
   TextEditingController _firstpasswordController = TextEditingController();
+
+  _login() async {
+    EasyLoading.dismiss();
+    Map<String, String> data = {
+      "phone": _firstNameController.text,
+      "password": _firstpasswordController.text,
+    };
+    EasyLoading.show(status: 'กำลังโหลด...');
+    var res = await CallAPI().postLogin(data, 'auth/login');
+    var body = convert.jsonDecode(res!.body);
+    var datalogin = body;
+    if (body.isEmpty) {
+      _login();
+    }
+    if (res.statusCode == 200) {
+      EasyLoading.dismiss();
+      final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      sharedPreferences.setString('token', '${datalogin['token']}');
+      EasyLoading.showSuccess('${datalogin['status']}');
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) {
+        return homeuser();
+      }));
+    } else {
+      EasyLoading.dismiss();
+      EasyLoading.showInfo('${datalogin['message']}');
+    }
+  }
 
   final ButtonStyle style = ElevatedButton.styleFrom(
     textStyle: const TextStyle(fontSize: 20, fontFamily: 'Mitr'),
@@ -36,14 +69,14 @@ class _signinState extends State<signin> {
             Padding(
               padding: const EdgeInsets.all(30.0),
               child: ClipRRect(
-                  borderRadius: BorderRadius.circular(30),
-                  child: Image.asset(
-                    'assets/img/sy1.jpg',
-                    height: 250,
-                    width: 280,
-                    fit: BoxFit.fill,
-                  ),
+                borderRadius: BorderRadius.circular(30),
+                child: Image.asset(
+                  'assets/img/sy1.jpg',
+                  height: 250,
+                  width: 280,
+                  fit: BoxFit.fill,
                 ),
+              ),
             ),
             Text(
               'เข้าสู่ระบบ',
@@ -60,6 +93,7 @@ class _signinState extends State<signin> {
                     padding: const EdgeInsets.all(10.0),
                     child: TextFormField(
                       controller: _firstNameController,
+                      keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         prefixIcon: Align(
                           widthFactor: 0.0,
@@ -69,8 +103,8 @@ class _signinState extends State<signin> {
                             color: Colors.black54,
                           ),
                         ),
-                        hintText: 'ชื่อ',
-                        labelText: "ชื่อ :",
+                        hintText: 'เบอร์โทรศัพท์ *',
+                        labelText: "เบอร์โทรศัพท์ * :",
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
@@ -79,7 +113,7 @@ class _signinState extends State<signin> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'กรุณากรอกชื่อ !';
+                          return 'กรุณากรอกเบอร์โทรศัพท์ !';
                         }
                         return null;
                       },
@@ -93,10 +127,11 @@ class _signinState extends State<signin> {
                     child: TextFormField(
                       obscureText: _isObscure,
                       controller: _firstpasswordController,
+
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.lock),
-                        hintText: 'รหัสผ่าน',
-                        labelText: "รหัสผ่าน :",
+                        hintText: 'เบอร์โทรศัพท์ *',
+                        labelText: "รหัสผ่าน * :",
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
@@ -139,8 +174,8 @@ class _signinState extends State<signin> {
                         width: 195,
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.of(context)
-                                .pushReplacement(MaterialPageRoute(builder: (context) {
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(builder: (context) {
                               return signup();
                             }));
                           },
@@ -177,10 +212,16 @@ class _signinState extends State<signin> {
                       style: style,
                       onPressed: () {
                         if (_formkey.currentState!.validate()) {
-
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('โอเค')),
-                          );
+                          final firstname = _firstNameController.text;
+                          final password = _firstpasswordController.text;
+                          if (firstname == null && password == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('กรุณากรอกข้อมูล !')),
+                            );
+                          } else {
+                            _login();
+                          }
                         }
                       },
                       child: const Text('เข้าสู่ระบบ'),

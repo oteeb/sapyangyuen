@@ -3,7 +3,7 @@ import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:sapyangyuen/intro_screens/introduction_screens.dart';
 import 'pages/home_page.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 void main() {

@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:sapyangyuen/pages/sign_in.dart';
 import 'package:sapyangyuen/user/calendar.dart';
 import 'package:sapyangyuen/user/contact.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'profile.dart';
 import 'home.dart';
 
@@ -16,6 +19,7 @@ class homeuser extends StatefulWidget {
 }
 
 class _homeuserState extends State<homeuser> {
+  
   int screensindex = 0;
   final screens = [
     Home(),
@@ -25,37 +29,46 @@ class _homeuserState extends State<homeuser> {
   ];
   @override
   Widget build(BuildContext context) {
-
+    EasyLoading.dismiss();
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Homeuser',style: TextStyle(color: Colors.black),),
-          backgroundColor: Color.fromARGB(255, 255, 255, 255),
-          elevation: 0,
-          actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: IconButton(
-                icon: const Icon(Icons.logout),
-                color: Colors.black,
-                tooltip: 'Logout',
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('This is a Logout')));
-                },
-              ),
-            ),
-          ],
+      appBar: AppBar(
+        title: Text(
+          'Homeuser',
+          style: TextStyle(color: Colors.black),
         ),
-
-        body: screens[screensindex],
-          bottomNavigationBar: ConvexAppBar(
-
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
+        elevation: 0,
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+              icon: const Icon(Icons.logout),
+              color: Colors.black,
+              tooltip: 'Logout',
+              onPressed: () async {
+                EasyLoading.show(status: 'กำลังโหลด...');
+                final SharedPreferences sharedPreferences =
+                    await SharedPreferences.getInstance();
+                sharedPreferences.remove('token');
+                EasyLoading.dismiss();
+                EasyLoading.showSuccess('ออกจากระบบ สำเร็จ !');
+                Navigator.of(context)
+                    .pushReplacement(MaterialPageRoute(builder: (context) {
+                  return signin();
+                }));
+                
+              },
+            ),
+          ),
+        ],
+      ),
+      body: screens[screensindex],
+      bottomNavigationBar: ConvexAppBar(
         items: [
           TabItem(icon: Icons.home, title: 'หน้าหลัก'),
           TabItem(icon: Icons.calendar_month, title: 'ปฏิทิน'),
           TabItem(icon: Icons.person, title: 'โปรไฟล์'),
           TabItem(icon: Icons.contacts, title: 'การติดต่อ'),
-
         ],
         initialActiveIndex: screensindex, //optional, default as 0
         onTap: (index) => setState(() => screensindex = index),

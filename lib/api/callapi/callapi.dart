@@ -31,16 +31,18 @@ class CallAPI {
 
   Future<http.Response?> postRegister(data, apiUrl) async {
     http.Response? response;
-    
+
     try {
       Map<String, String> body = data;
-      response = await http.post(Uri.parse("${besturl + apiUrl}"),
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          encoding: Encoding.getByName('utf-8'),
-          body: body,
-          );
+      print(body);
+      response = await http.post(
+        Uri.parse("${besturl + apiUrl}"),
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        encoding: Encoding.getByName('utf-8'),
+        body: body,
+      );
       if (response.statusCode == 200) {
         return response;
       } else {
@@ -50,9 +52,29 @@ class CallAPI {
     } catch (e) {
       log(e.toString());
     }
-    
   }
 
+    Future<http.Response?> postLogin(data, apiUrl) async {
+    http.Response? response;
 
-  
+    try {
+      Map<String, String> body = data;
+      response = await http.post(
+        Uri.parse("${besturl + apiUrl}"),
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        encoding: Encoding.getByName('utf-8'),
+        body: body,
+      );
+      if (response.statusCode == 200) {
+        return response;
+      } else {
+        return response;
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
 }

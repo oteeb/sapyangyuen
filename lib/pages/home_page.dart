@@ -100,7 +100,7 @@ class homepage extends StatelessWidget {
                 ),
                 onPressed: () {
                   Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) {
+                      .pushReplacement(MaterialPageRoute(builder: (context) {
                     return signin();
                   }));
                 },

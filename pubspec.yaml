@@ -49,12 +49,13 @@ dependencies:
   material: ^1.0.0+2
   video_player: ^2.4.6
   lottie: ^1.4.1
+  shared_preferences: ^2.0.15
   
   
 
 flutter_icons:
   android: true
-  image_path: "img_logo/logo450.png"
+  image_path: "img_logo/logo500.png"
 
 dev_dependencies:
   flutter_test:
@@ -63,9 +64,9 @@ dev_dependencies:
     
 flutter_native_splash:
   color: "#2836B0"
-  image: assets/logo450.png
+  image: assets/logo500.png
   color_dark: "#121212"
-  image_dark: assets/logo450.png
+  image_dark: assets/logo500.png
   
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
