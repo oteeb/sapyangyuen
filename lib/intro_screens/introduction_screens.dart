@@ -20,50 +20,42 @@ class IntroductionScreens extends StatefulWidget {
 }
 
 class _IntroductionScreensState extends State<IntroductionScreens> {
+
   String? finatoken;
   Future getdatasharedPreferences() async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
+    EasyLoading.show(status: 'กำลังโหลด...');
+    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var datatoken = sharedPreferences.getString('token');
-
     setState(() {
       finatoken = datatoken;
     });
     if (finatoken == null) {
-      
+      EasyLoading.dismiss();
     } else {
+      EasyLoading.dismiss();
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
+      return homeuser();
+    }));
       
     }
     print(finatoken);
-  }
-
-  void _nextIntroductionScreens() async {
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
-      return IntroductionScreens();
-    }));
-  }
-
-  void _nexthomeuser() async {
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
-      return homeuser();
-    }));
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    //getdatasharedPreferences();
-    getdatasharedPreferences().whenComplete(() async {
-      Timer(
-          Duration(seconds: 2),
-          () => finatoken == null
-              ? Container()
-              : Navigator.of(context)
-                  .pushReplacement(MaterialPageRoute(builder: (context) {
-                  return homeuser();
-                })));
-    });
+    getdatasharedPreferences();
+    // getdatasharedPreferences().whenComplete(() async {
+    //   Timer(
+    //       Duration(seconds: 2),
+    //       () => finatoken == null
+    //           ? Container()
+    //           : Navigator.of(context)
+    //               .pushReplacement(MaterialPageRoute(builder: (context) {
+    //               return homeuser();
+    //             })));
+    // });
   }
 
   PageController _controller = PageController();
