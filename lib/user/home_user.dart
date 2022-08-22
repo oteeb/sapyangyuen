@@ -4,12 +4,14 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:sapyangyuen/api/callapi/callapi.dart';
 import 'package:sapyangyuen/pages/sign_in.dart';
 import 'package:sapyangyuen/user/calendar.dart';
 import 'package:sapyangyuen/user/contact.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'profile.dart';
 import 'home.dart';
+import 'dart:convert' as convert;
 
 class homeuser extends StatefulWidget {
   const homeuser({Key? key}) : super(key: key);
@@ -20,6 +22,35 @@ class homeuser extends StatefulWidget {
 
 class _homeuserState extends State<homeuser> {
   
+  String? finatoken;
+  Future getdatasharedPreferences() async {
+    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var datatoken = sharedPreferences.getString('token');
+    setState(() {
+      finatoken = datatoken;
+    });
+    var res = await CallAPI().getUser(finatoken, 'auth/users');
+    var body = convert.jsonDecode(res!.body);
+    var dataUser = body;
+    
+    print(dataUser['data']['user'][0]['name']);
+    return(dataUser['data']['user'][0]['name']);
+
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getdatasharedPreferences();
+  }
+
+  void removeSharedPreferences() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    sharedPreferences.remove('token');
+  }
+
   int screensindex = 0;
   final screens = [
     Home(),
@@ -33,7 +64,7 @@ class _homeuserState extends State<homeuser> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Homeuser',
+          "ffffffff",
           style: TextStyle(color: Colors.black),
         ),
         backgroundColor: Color.fromARGB(255, 255, 255, 255),
@@ -45,18 +76,15 @@ class _homeuserState extends State<homeuser> {
               icon: const Icon(Icons.logout),
               color: Colors.black,
               tooltip: 'Logout',
-              onPressed: () async {
+              onPressed: () {
                 EasyLoading.show(status: 'กำลังโหลด...');
-                final SharedPreferences sharedPreferences =
-                    await SharedPreferences.getInstance();
-                sharedPreferences.remove('token');
+                removeSharedPreferences();
                 EasyLoading.dismiss();
                 EasyLoading.showSuccess('ออกจากระบบ สำเร็จ !');
                 Navigator.of(context)
                     .pushReplacement(MaterialPageRoute(builder: (context) {
                   return signin();
                 }));
-                
               },
             ),
           ),

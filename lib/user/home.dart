@@ -5,6 +5,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sapyangyuen/api/callapi/callapi.dart';
 import 'package:sapyangyuen/api/model/model_province.dart';
+import 'package:sapyangyuen/user/loading/loading.dart';
 import 'package:sapyangyuen/user/video_player.dart';
 import 'dart:convert';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -160,30 +161,16 @@ class _HomeState extends State<Home> {
                               SizedBox(
                                 height: 20,
                               ),
+
                             ],
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: 8,
-                      ),
-
-                      //videoPlayer(),
-
-                      SizedBox(
-                        height: 8,
-                      ),
                     ],
                   );
-                  // return ListTile(
-                  //   onTap: () {},
-                  //   title: Text(snapshot.data![index].nameTh!),
-                  //   subtitle: Text(snapshot.data![index].nameEn!),
-                  // );
                 });
           } else {
-            return Center(child: Lottie.network(
-                'https://assets8.lottiefiles.com/packages/lf20_a2chheio.json'),);
+            return loadingHome();
           }
         },
       ),

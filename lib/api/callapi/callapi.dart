@@ -19,8 +19,6 @@ class CallAPI {
       var res = response.body;
       var resdata = json.decode(res);
       var resfrom = modelProvinceFromJson(res);
-      print("*******ผ่าน");
-      print(resfrom);
 
       return resfrom;
     } else {
@@ -29,12 +27,32 @@ class CallAPI {
     }
   }
 
+  Future getUser(data, apiUrl) async {
+    try {
+      final response = await http.get(
+        Uri.parse('${besturl + apiUrl}'),
+        headers: {
+          HttpHeaders.authorizationHeader: 'Bearer $data',
+        },
+      );
+      //print(response.statusCode);
+      if (response.statusCode == 200) {
+        return response;
+      } else {
+        return response;
+      }
+    } on Exception catch (e) {
+      log(e.toString());
+    }
+    
+  }
+
   Future<http.Response?> postRegister(data, apiUrl) async {
     http.Response? response;
 
     try {
       Map<String, String> body = data;
-      print(body);
+
       response = await http.post(
         Uri.parse("${besturl + apiUrl}"),
         headers: {
@@ -54,7 +72,7 @@ class CallAPI {
     }
   }
 
-    Future<http.Response?> postLogin(data, apiUrl) async {
+  Future<http.Response?> postLogin(data, apiUrl) async {
     http.Response? response;
 
     try {
@@ -76,5 +94,4 @@ class CallAPI {
       log(e.toString());
     }
   }
-
 }

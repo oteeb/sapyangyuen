@@ -41,7 +41,8 @@ class _signinState extends State<signin> {
       EasyLoading.dismiss();
       final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
       sharedPreferences.setString('token', '${datalogin['token']}');
-      EasyLoading.showSuccess('${datalogin['status']}');
+      EasyLoading.showSuccess('เข้าสู่ระบบสำเร็จ');
+      // print(datalogin['token']);
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (context) {
         return homeuser();

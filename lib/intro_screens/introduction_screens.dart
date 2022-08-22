@@ -38,7 +38,7 @@ class _IntroductionScreensState extends State<IntroductionScreens> {
     }));
       
     }
-    print(finatoken);
+
   }
 
   @override
@@ -46,16 +46,6 @@ class _IntroductionScreensState extends State<IntroductionScreens> {
     // TODO: implement initState
     super.initState();
     getdatasharedPreferences();
-    // getdatasharedPreferences().whenComplete(() async {
-    //   Timer(
-    //       Duration(seconds: 2),
-    //       () => finatoken == null
-    //           ? Container()
-    //           : Navigator.of(context)
-    //               .pushReplacement(MaterialPageRoute(builder: (context) {
-    //               return homeuser();
-    //             })));
-    // });
   }
 
   PageController _controller = PageController();

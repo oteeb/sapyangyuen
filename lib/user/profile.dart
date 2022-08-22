@@ -15,6 +15,7 @@ class _profileState extends State<profile> {
     return Scaffold(
       body: Container(
         color: Color.fromARGB(255, 197, 197, 197),
+        child: Text('data'),
       ),
     );
   }
