@@ -1,14 +1,17 @@
-class User_Model {
+class UserModel {
+  String? status;
   Data? data;
 
-  User_Model({this.data});
+  UserModel({this.status, this.data});
 
-  User_Model.fromJson(Map<String, dynamic> json) {
+  UserModel.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['status'] = this.status;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -17,6 +20,7 @@ class User_Model {
 }
 
 class Data {
+
   List<User>? user;
   int? iat;
 
@@ -50,20 +54,20 @@ class User {
   String? name;
   String? familyName;
   String? phone;
-  Null? cardId;
-  Null? houseNumber;
-  Null? amphur;
-  Null? district;
-  Null? province;
-  Null? postcode;
-  Null? fulladdress;
+  int? cardId;
+  int? houseNumber;
+  int? amphur;
+  int? district;
+  int? province;
+  int? postcode;
+  String? fulladdress;
   int? isActive;
-  Null? createdAt;
-  Null? updatedAt;
+  int? createdAt;
+  int? updatedAt;
   String? role;
   String? loginBy;
   int? activate;
-  Null? profileImage;
+  String? profileImage;
 
   User(
       {this.userId,
@@ -138,3 +142,4 @@ class User {
     return data;
   }
 }
+

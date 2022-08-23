@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:sapyangyuen/api/callapi/callapi.dart';
+import 'package:sapyangyuen/api/model/model_user.dart';
 import 'package:sapyangyuen/pages/sign_in.dart';
 import 'package:sapyangyuen/user/calendar.dart';
 import 'package:sapyangyuen/user/contact.dart';
@@ -21,21 +22,28 @@ class homeuser extends StatefulWidget {
 }
 
 class _homeuserState extends State<homeuser> {
-  
   String? finatoken;
+  String? fname;
+  String? lname;
+  String? fullname;
+  
   Future getdatasharedPreferences() async {
-    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
     var datatoken = sharedPreferences.getString('token');
     setState(() {
       finatoken = datatoken;
     });
     var res = await CallAPI().getUser(finatoken, 'auth/users');
-    var body = convert.jsonDecode(res!.body);
-    var dataUser = body;
-    
-    print(dataUser['data']['user'][0]['name']);
-    return(dataUser['data']['user'][0]['name']);
+    var datares = convert.jsonDecode(res!.body);
+    var data = UserModel.fromJson(datares);
+    setState(() {
+      fname = data.data?.user![0].name;
+      lname = data.data?.user![0].familyName;
+      fullname = '$fname'+' '+'$lname';
+    });
 
+    print(data.data?.user![0].familyName);
   }
 
   @override
@@ -43,6 +51,8 @@ class _homeuserState extends State<homeuser> {
     // TODO: implement initState
     super.initState();
     getdatasharedPreferences();
+    fullname == null ? fullname = "กำลังโหลด..." : fullname;
+        
   }
 
   void removeSharedPreferences() async {
@@ -64,7 +74,7 @@ class _homeuserState extends State<homeuser> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "ffffffff",
+          "$fullname",
           style: TextStyle(color: Colors.black),
         ),
         backgroundColor: Color.fromARGB(255, 255, 255, 255),
