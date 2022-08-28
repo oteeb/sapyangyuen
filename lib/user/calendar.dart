@@ -15,9 +15,9 @@ class calendar extends StatefulWidget {
 class _calendarState extends State<calendar> {
   DateTime myDateTime = DateTime.now();
   var formatterm = DateFormat.MMMM("th");
-  var formatterd = DateFormat.d("th");
-  var formattere = DateFormat.EEEE("th");
-  var formatterus = DateFormat("EEEE, d, MMMM, y");
+  var formatterD = DateFormat.d("th");
+  var formatterE = DateFormat.EEEE("th");
+  var formatterUS = DateFormat("EEEE, d, MMMM, y");
 
   void _showDatePicker() async {
     DateTime? newDateTime = await showRoundedDatePicker(
@@ -46,8 +46,8 @@ class _calendarState extends State<calendar> {
             fontWeight: FontWeight.bold),
       ),
       initialDate: DateTime.now(),
-      firstDate: DateTime(DateTime.now().year - 100),
-      lastDate: DateTime(DateTime.now().year + 100),
+      firstDate: DateTime(DateTime.now().year - 50),
+      lastDate: DateTime(DateTime.now().year + 50),
       locale: Locale("th", "TH"),
       era: EraMode.BUDDHIST_YEAR,
     );
@@ -71,11 +71,11 @@ class _calendarState extends State<calendar> {
               height: 20,
             ),
             Text(
-              '${formattere.format(myDateTime)}ที่ ${formatterd.format(myDateTime)} เดือน${formatterm.format(myDateTime)} พ.ศ. ${myDateTime.year + 543}',
+              '${formatterE.format(myDateTime)}ที่ ${formatterD.format(myDateTime)} เดือน${formatterm.format(myDateTime)} พ.ศ. ${myDateTime.year + 543}',
               style: TextStyle(fontSize: 20),
             ),
             Text(
-              '${formatterus.format(myDateTime)}',
+              '${formatterUS.format(myDateTime)}',
               style: TextStyle(fontSize: 20),
             ),
             SizedBox(

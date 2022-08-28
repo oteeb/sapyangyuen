@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:sapyangyuen/api/model/model_province.dart';
 import 'package:sapyangyuen/api/model/model_register.dart';
-import 'package:dio/dio.dart';
+
 
 class CallAPI {
   final besturl1 =
@@ -27,7 +27,7 @@ class CallAPI {
     }
   }
 
-  Future getUser(data, apiUrl) async {
+  Future getUserToken(data, apiUrl) async {
     try {
       final response = await http.get(
         Uri.parse('${besturl + apiUrl}'),

@@ -24,6 +24,9 @@ class _HomeState extends State<Home> {
 
   var _modelProvinceData;
   var _newmodelProvinceData;
+  
+  
+
 
   ProvinceDataApi() {
     _modelProvinceData = CallAPI().GetapiProvince();
@@ -59,6 +62,7 @@ class _HomeState extends State<Home> {
               return ListView.builder(
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
+
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -117,52 +121,56 @@ class _HomeState extends State<Home> {
                                 SizedBox(
                                   height: 10,
                                 ),
-                                CarouselSlider.builder(
-                                  options: CarouselOptions(
-                                    height: 400,
-                                    autoPlay: true,
-                                    viewportFraction: 1.0,
-                                    enableInfiniteScroll: true,
-                                    onPageChanged: (index, reason) =>
-                                        setState(() => activeindex = index),
-                                  ),
-                                  itemCount: snapshot.data!.length,
-                                  itemBuilder: (BuildContext context,
-                                          int itemIndex, int pageViewIndex) =>
-                                      Stack(
-                                    children: <Widget>[
-                                      Container(
+                                Stack(
+                                  children: [
+                                    CarouselSlider.builder(
+                                      options: CarouselOptions(
+                                        height: 400,
+                                        //autoPlay: true,
+                                        viewportFraction: 1.0,
+                                        enableInfiniteScroll: true,
+                                        onPageChanged: (index, reason) =>
+                                            setState(() => activeindex = index),
+                                      ),
+
+                                      itemCount: snapshot.data!.length,
+                                      itemBuilder: (BuildContext context,
+                                              int itemIndex,
+                                              int pageViewIndex) => 
+                                          Container(
                                         color:
                                             Color.fromARGB(255, 37, 147, 153),
                                         height:
                                             MediaQuery.of(context).size.height *
-                                                0.65,
+                                                0.20,
                                         width:
                                             MediaQuery.of(context).size.width,
-                                        //child: Text("itemIndex.toString()"),
+                                        
+                                        child: Text("${itemIndex+1}"),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(15.0),
-                                        child: Align(
-                                          alignment: Alignment.topRight,
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(30),
-                                            child: Container(
-                                              color: Color.fromARGB(
-                                                  77, 50, 71, 72),
-                                              height: 20.0,
-                                              width: 45.0,
-                                              child: Text(
-                                                '${itemIndex + 1}/${snapshot.data!.length.toString()}',
-                                                textAlign: TextAlign.center,
-                                              ),
+                                      
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: Align(
+                                        alignment: Alignment.topRight,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          child: Container(
+                                            color:
+                                                Color.fromARGB(77, 50, 71, 72),
+                                            height: 20.0,
+                                            width: 55.0,
+                                            child: Text(
+                                              '${activeindex + 1}/${snapshot.data!.length.toString()}',
+                                              textAlign: TextAlign.center,
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                                 SizedBox(
                                   height: 20,

@@ -34,7 +34,7 @@ class _homeuserState extends State<homeuser> {
     setState(() {
       finatoken = datatoken;
     });
-    var res = await CallAPI().getUser(finatoken, 'auth/users');
+    var res = await CallAPI().getUserToken(finatoken, 'auth/users');
     var datares = convert.jsonDecode(res!.body);
     var data = UserModel.fromJson(datares);
     setState(() {
@@ -43,7 +43,7 @@ class _homeuserState extends State<homeuser> {
       fullname = '$fname'+' '+'$lname';
     });
 
-    print(data.data?.user![0].familyName);
+    //print(data.data?.user![0].familyName);
   }
 
   @override

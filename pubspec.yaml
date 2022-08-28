@@ -40,7 +40,6 @@ dependencies:
   convex_bottom_bar: ^3.0.0
   dropdown_button2: ^1.6.3
   http: ^0.13.4
-  dio: ^4.0.6
   flutter_easyloading: ^3.0.5
   carousel_slider: ^4.1.1
   smooth_page_indicator: ^1.0.0+2
@@ -53,6 +52,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_rounded_date_picker: 3.0.1
+  image_picker: ^0.8.5+3
   
   
   
