@@ -35,6 +35,7 @@ class Data {
   String? title;
   String? description;
   int? createdBy;
+  String? createdAt;
   String? image;
   String? pathFile;
   String? userNumber;
@@ -46,6 +47,7 @@ class Data {
       this.title,
       this.description,
       this.createdBy,
+      this.createdAt,
       this.image,
       this.pathFile,
       this.userNumber,
@@ -57,6 +59,7 @@ class Data {
     title = json['title'];
     description = json['description'];
     createdBy = json['created_by'];
+    createdAt = json['created_at'];
     image = json['image'];
     pathFile = json['path_file'];
     userNumber = json['user_number'];
@@ -70,6 +73,7 @@ class Data {
     data['title'] = this.title;
     data['description'] = this.description;
     data['created_by'] = this.createdBy;
+    data['created_at'] = this.createdAt;
     data['image'] = this.image;
     data['path_file'] = this.pathFile;
     data['user_number'] = this.userNumber;

@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/foundation/key.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sapyangyuen/api/callapi/callapi.dart';
+import 'package:sapyangyuen/api/model/model_home.dart';
 import 'package:sapyangyuen/api/model/model_province.dart';
 import 'package:sapyangyuen/user/loading/loading.dart';
 import 'package:sapyangyuen/user/video_player.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -42,11 +45,25 @@ class _HomeState extends State<Home> {
       _modelProvinceData = _newmodelProvinceData;
     });
   }
+late List data;
+    Future<HomeModel> getdatasharedPreferences() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    var datatoken = sharedPreferences.getString('token');
+    var res = await CallAPI().getHome(datatoken, 'activity/images');
+
+    var datares = convert.jsonDecode(res!.body);
+    var data = HomeModel.fromJson(datares);
+
+    print(data.data![1].createdAt);
+    return (data);
+  }
 
   @override
   void initState() {
     super.initState();
-    ProvinceDataApi();
+    //ProvinceDataApi();
+    getdatasharedPreferences();
   }
 
   @override
@@ -55,13 +72,15 @@ class _HomeState extends State<Home> {
       backgroundColor: Color.fromARGB(255, 197, 197, 197),
       body: RefreshIndicator(
         onRefresh: refresh,
-        child: FutureBuilder(
-          future: _modelProvinceData,
-          builder: (context, AsyncSnapshot<List<ModelProvince>?> snapshot) {
+        child: FutureBuilder<HomeModel>(
+          future: getdatasharedPreferences(),
+          builder: (BuildContext context, snapshot) {
             if (snapshot.hasData) {
+              var data = snapshot.data!;
+              
               return ListView.builder(
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (context, index) {
+                  itemCount: data.data! == null ? 0 : data.data!.length,
+                  itemBuilder: (BuildContext context, index) {
 
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -84,9 +103,9 @@ class _HomeState extends State<Home> {
                                         padding:
                                             const EdgeInsets.only(left: 5.0),
                                         child: Text(
-                                          snapshot.data![index].nameTh!,
+                                          data.data![index].title.toString(),
                                           style: TextStyle(
-                                              fontSize: 20,
+                                              fontSize: 24,
                                               fontWeight: FontWeight.w500,
                                               color: Colors.black),
                                         ),
@@ -97,9 +116,9 @@ class _HomeState extends State<Home> {
                                         padding:
                                             const EdgeInsets.only(right: 5.0),
                                         child: Text(
-                                          snapshot.data![index].id.toString(),
+                                          DateFormat('dd/MM/yyyy').format(DateTime.parse(data.data![2].createdAt.toString())),
                                           textAlign: TextAlign.end,
-                                          style: TextStyle(color: Colors.black),
+                                          style: TextStyle(fontSize: 12,color: Colors.black),
                                         ),
                                       ),
                                     ),
@@ -133,7 +152,7 @@ class _HomeState extends State<Home> {
                                             setState(() => activeindex = index),
                                       ),
 
-                                      itemCount: snapshot.data!.length,
+                                      itemCount: data.data!.length,
                                       itemBuilder: (BuildContext context,
                                               int itemIndex,
                                               int pageViewIndex) => 
@@ -163,7 +182,7 @@ class _HomeState extends State<Home> {
                                             height: 20.0,
                                             width: 55.0,
                                             child: Text(
-                                              '${activeindex + 1}/${snapshot.data!.length.toString()}',
+                                              '${activeindex + 1}/${data.data!.length.toString()}',
                                               textAlign: TextAlign.center,
                                             ),
                                           ),
@@ -179,7 +198,7 @@ class _HomeState extends State<Home> {
                                   alignment: Alignment.center,
                                   child: AnimatedSmoothIndicator(
                                     activeIndex: activeindex,
-                                    count: snapshot.data!.length,
+                                    count: data.data!.length,
                                     effect: ScrollingDotsEffect(),
                                   ),
                                 ),

@@ -6,7 +6,6 @@ import 'package:http/http.dart' as http;
 import 'package:sapyangyuen/api/model/model_province.dart';
 import 'package:sapyangyuen/api/model/model_register.dart';
 
-
 class CallAPI {
   final besturl1 =
       'https://raw.githubusercontent.com/kongvut/thai-province-data/master';
@@ -27,6 +26,29 @@ class CallAPI {
     }
   }
 
+  Future getHome(datatoken, apiUrl) async {
+    try {
+      final response = await http.get(
+        Uri.parse('${besturl + apiUrl}').replace(
+            queryParameters: {
+          'page': 1,
+          'perPage': 10,
+        }.map((key, value) => MapEntry(key, value.toString()))),
+        headers: {
+          HttpHeaders.authorizationHeader: 'Bearer $datatoken',
+        },
+      );
+      //print(response.statusCode);
+      if (response.statusCode == 200) {
+        return response;
+      } else {
+        return response;
+      }
+    } on Exception catch (e) {
+      log(e.toString());
+    }
+  }
+
   Future getUserToken(data, apiUrl) async {
     try {
       final response = await http.get(
@@ -44,7 +66,6 @@ class CallAPI {
     } on Exception catch (e) {
       log(e.toString());
     }
-    
   }
 
   Future<http.Response?> postRegister(data, apiUrl) async {
